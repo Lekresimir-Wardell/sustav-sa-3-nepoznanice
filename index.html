@@ -4,10 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cramerov Kalkulator 3x3</title>
-  /* ====== MOBILE-FRIENDLY CRAMER CALCULATOR STYLE ====== */
+
   <style>
+
 :root {
-  --bg: #f2f5f9;
+  --bg: #f3f6fa;
   --card: #ffffff;
   --accent: #007bff;
   --accent-dark: #0056c7;
@@ -41,8 +42,9 @@ h1 {
   box-shadow: var(--shadow);
   padding: 14px 16px;
   width: 100%;
-  max-width: 480px;
-  margin-bottom: 12px;
+  max-width: 420px;
+  margin-bottom: 14px;
+  box-sizing: border-box;
 }
 
 .section h3 {
@@ -50,16 +52,20 @@ h1 {
   margin-bottom: 10px;
   font-size: 1rem;
   color: #333;
+  text-align: center;
 }
 
 .row {
   display: flex;
-  justify-content: space-between;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
 }
 
 input {
-  flex: 1;
+  flex: 1 1 90px;
+  min-width: 80px;
+  max-width: 100px;
   padding: 10px;
   text-align: center;
   font-size: 1rem;
@@ -67,6 +73,7 @@ input {
   border-radius: 10px;
   background: #fafcff;
   transition: all 0.2s ease;
+  box-sizing: border-box;
 }
 
 input:focus {
@@ -78,7 +85,7 @@ input:focus {
 
 button {
   width: 100%;
-  max-width: 480px;
+  max-width: 420px;
   padding: 12px;
   font-size: 1.1rem;
   font-weight: 600;
@@ -91,18 +98,13 @@ button {
   transition: background 0.25s ease, transform 0.1s ease;
 }
 
-button:active {
-  transform: scale(0.98);
-}
-
-button:hover {
-  background: var(--accent-dark);
-}
+button:hover { background: var(--accent-dark); }
+button:active { transform: scale(0.98); }
 
 .output {
   margin-top: 16px;
   width: 100%;
-  max-width: 480px;
+  max-width: 420px;
   background: var(--card);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
@@ -110,15 +112,17 @@ button:hover {
   font-size: 1rem;
   white-space: pre-line;
   overflow-x: auto;
+  box-sizing: border-box;
 }
 
-/* Make spacing nicer on very small screens */
+/* Make everything scale perfectly on small screens */
 @media (max-width: 480px) {
   body { padding: 12px; }
-  input { font-size: 0.95rem; padding: 8px; }
-  button { font-size: 1rem; }
   .section { padding: 12px; }
+  input { flex: 1 1 80px; font-size: 0.95rem; }
+  button { font-size: 1rem; }
 }
+
 </style>
 </head>
 <body>
@@ -223,4 +227,5 @@ button:hover {
   </script>
 </body>
 </html>
+
 
