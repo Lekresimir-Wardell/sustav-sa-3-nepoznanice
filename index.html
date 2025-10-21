@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cramerov Kalkulator 3x3</title>
+  /* ====== MOBILE-FRIENDLY CRAMER CALCULATOR STYLE ====== */
+:root {
+  --bg: #f2f5f9;
+  --card: #ffffff;
+  --accent: #007bff;
+  --accent-dark: #0056c7;
+  --text: #111;
+  --border: #d8dee9;
+  --radius: 14px;
+  --shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+body {
+  font-family: "Inter", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  margin: 0;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 1.6rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.section {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px 16px;
+  width: 100%;
+  max-width: 480px;
+  margin-bottom: 12px;
+}
+
+.section h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1rem;
+  color: #333;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+input {
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+  font-size: 1rem;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  background: #fafcff;
+  transition: all 0.2s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(0,123,255,0.2);
+  background: white;
+}
+
+button {
+  width: 100%;
+  max-width: 480px;
+  padding: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: white;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: background 0.25s ease, transform 0.1s ease;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+button:hover {
+  background: var(--accent-dark);
+}
+
+.output {
+  margin-top: 16px;
+  width: 100%;
+  max-width: 480px;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px;
+  font-size: 1rem;
+  white-space: pre-line;
+  overflow-x: auto;
+}
+
+/* Make spacing nicer on very small screens */
+@media (max-width: 480px) {
+  body { padding: 12px; }
+  input { font-size: 0.95rem; padding: 8px; }
+  button { font-size: 1rem; }
+  .section { padding: 12px; }
+}
+
+</head>
+<body>
+  <h1>Cramerov Kalkulator 3x3</h1>
+
+  <div class="section">
+    <h3>Koeficijenti za x:</h3>
+    <div class="row">
+      <input type="number" id="a00" placeholder="x1">
+      <input type="number" id="a10" placeholder="x2">
+      <input type="number" id="a20" placeholder="x3">
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Koeficijenti za y:</h3>
+    <div class="row">
+      <input type="number" id="a01" placeholder="y1">
+      <input type="number" id="a11" placeholder="y2">
+      <input type="number" id="a21" placeholder="y3">
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Koeficijenti za z:</h3>
+    <div class="row">
+      <input type="number" id="a02" placeholder="z1">
+      <input type="number" id="a12" placeholder="z2">
+      <input type="number" id="a22" placeholder="z3">
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Slobodni članovi (b):</h3>
+    <div class="row">
+      <input type="number" id="b0" placeholder="b₁">
+      <input type="number" id="b1" placeholder="b₂">
+      <input type="number" id="b2" placeholder="b₃">
+    </div>
+  </div>
+
+  <button onclick="solve()">Izračunaj</button>
+
+  <div id="output" class="output"></div>
+
+  <script>
+    function determinant3x3(a) {
+      return (
+        a[0][0]*(a[1][1]*a[2][2] - a[1][2]*a[2][1]) -
+        a[0][1]*(a[1][0]*a[2][2] - a[1][2]*a[2][0]) +
+        a[0][2]*(a[1][0]*a[2][1] - a[1][1]*a[2][0])
+      );
+    }
+
+    function solve() {
+      const A = [
+        [val("a00"), val("a01"), val("a02")],
+        [val("a10"), val("a11"), val("a12")],
+        [val("a20"), val("a21"), val("a22")]
+      ];
+      const b = [val("b0"), val("b1"), val("b2")];
+
+      const D = determinant3x3(A);
+
+      // Dx
+      let temp = A.map(r => [...r]);
+      for (let i = 0; i < 3; i++) temp[i][0] = b[i];
+      const Dx = determinant3x3(temp);
+
+      // Dy
+      temp = A.map(r => [...r]);
+      for (let i = 0; i < 3; i++) temp[i][1] = b[i];
+      const Dy = determinant3x3(temp);
+
+      // Dz
+      temp = A.map(r => [...r]);
+      for (let i = 0; i < 3; i++) temp[i][2] = b[i];
+      const Dz = determinant3x3(temp);
+
+      let out = `D  = ${D.toFixed(4)}\nDx = ${Dx.toFixed(4)}\nDy = ${Dy.toFixed(4)}\nDz = ${Dz.toFixed(4)}\n\n`;
+
+      if (D === 0) {
+        if (Dx === 0 && Dy === 0 && Dz === 0) {
+          out += "➡️ Sustav ima beskonačno mnogo rješenja (D=Dx=Dy=Dz=0)";
+        } else {
+          out += "❌ Sustav nema rješenja (D=0, ali barem jedan od Dx, Dy, Dz ≠ 0)";
+        }
+      } else {
+        const x = Dx / D;
+        const y = Dy / D;
+        const z = Dz / D;
+        out += `✅ Jedinstveno rješenje:\n`;
+        out += `x = ${x.toFixed(4)}\ny = ${y.toFixed(4)}\nz = ${z.toFixed(4)}`;
+      }
+
+      document.getElementById("output").textContent = out;
+    }
+
+    function val(id) {
+      return parseFloat(document.getElementById(id).value) || 0;
+    }
+  </script>
+</body>
+</html>
